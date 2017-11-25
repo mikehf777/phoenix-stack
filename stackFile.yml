@@ -12,7 +12,7 @@ services:
     remoteAccess: false
     deployTo:
       - gandalf
-      - gadalf2
+      - gandalf2
 
 
   - name: platform
@@ -65,8 +65,8 @@ hosts:
     requirements:
       cores: 1
       memory: 1
-  
-  - name: gadalf2
-    requeriments:
+
+  - name: gandalf2
+    requirements:
       cores: 1
-      memory: 2
+      memory: 1
