@@ -1,0 +1,54 @@
+--- 
+hosts: 
+  - 
+    name: platform
+    requirements: 
+      cores: 1
+      memory: 1
+services: 
+  - 
+    configuration: MasterSlave
+    deployTo: 
+      - platform
+    env: 
+      POSTGRES_PASSWORD: ~
+      POSTGRES_USER: ~
+    name: db
+    ports: 
+      - 5434
+    remoteAccess: false
+    type: postgres
+    version: 9.6
+  - 
+    deployTo: 
+      - platform
+    env: 
+      APP_KEY: "{{=randomString(32)}}"
+      DB_DATABASE: "{{=service('db').getEnv('POSTGRES_USER')}}"
+      DB_DRIVER: pgsql
+      DB_HOST: "{{=service('db').getMasterAlias()}}"
+      DB_PASSWORD: "{{=service('db').getEnv('POSTGRES_PASSWORD')}}"
+      DB_USERNAME: "{{=service('db').getEnv('POSTGRES_USER')}}"
+    image: bitwalker/alpine-elixir-phoenix
+    name: platform
+    ports: 
+      - 4000
+      - 4001
+      - 4008
+    remoteAccess: false
+    type: docker
+    version: latest
+  - 
+    deployTo: 
+      - platform
+    name: web
+    ports: 
+      - 80
+      - 443
+    remoteAccess: true
+    serviceFiles: 
+      - 
+        name: platform
+    type: nginx
+    version: 1.13
+version: "1.0"
