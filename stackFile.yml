@@ -24,13 +24,14 @@ services:
       - 4001
       - 4008
     remoteAccess: false
-    localDeps: |
+    localDeps: "
       mix deps.get --only prod
       mix compile
       brunch build --production
       mix phx.digest
       mix ecto.migrate
-    initialCommand: mix phx.server
+      mix phx.server
+    "
     env:
       DB_DRIVER: "pgsql"
       DB_HOST: "{{=service('db').getMasterAlias()}}"
@@ -41,7 +42,6 @@ services:
       MIX_ENV: "prod"
     deployTo:
       - platform
-
 
   - name: web
     type: nginx
